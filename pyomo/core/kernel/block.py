@@ -35,6 +35,10 @@ import six
 
 logger = logging.getLogger('pyomo.core')
 
+from pyomo.core.kernel.delayed_constructors import DelayedConstraintConstructor, DelayedVarConstructor
+
+_delayed_constructor_types = {DelayedConstraintConstructor, DelayedVarConstructor}
+
 class IBlock(IHeterogeneousContainer):
     """A generalized container that can store objects of
     any category type as attributes.
@@ -173,6 +177,10 @@ class block(IBlock):
     def __setattr__(self, name, obj):
         needs_del = False
         same_obj = False
+        if type(obj) in _delayed_constructor_types:
+            setattr(self, name, obj.build(self))
+            return
+
         if name in self._order:
             # to avoid an edge case, we need to delay
             # deleting the current object until we

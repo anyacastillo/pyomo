@@ -26,3 +26,5 @@ import pyomo.core.kernel.suffix
 import pyomo.core.kernel.block
 import pyomo.core.kernel.piecewise_library
 import pyomo.core.kernel.set_types
+import pyomo.core.kernel.wrappers
+import pyomo.core.kernel.delayed_constructors
